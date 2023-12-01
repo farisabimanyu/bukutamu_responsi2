@@ -29,7 +29,7 @@ export class BukutamuPage implements OnInit {
         this.getBukutamu();
     }
     getBukutamu() {
-        this._apiService.tampil('tampildata.php').subscribe({
+        this._apiService.tampil('lihatdata.php').subscribe({
             next: (res: any) => {
                 console.log('sukses', res);
                 this.dataTamu = res;

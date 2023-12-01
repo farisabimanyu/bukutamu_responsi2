@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class ApiService {
     constructor(public http: HttpClient) { }
     apiURL() {
-        return 'http://localhost/bukutamu';
+        return 'http://localhost:70/bukutamu';
     }
 
     login(data: any, endpoint: string) {
