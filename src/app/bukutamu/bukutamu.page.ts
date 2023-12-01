@@ -72,7 +72,7 @@ export class BukutamuPage implements OnInit {
             console.log('gagal tambah tamu karena masih ada data yg kosong');
         }
     }
-    hapusMahasiswa(id: any) {
+    hapusBukutamu(id: any) {
         this._apiService.hapus(id, 'hapusdata.php?id=').subscribe({
             next: (res: any) => {
                 console.log('sukses', res);
@@ -84,7 +84,7 @@ export class BukutamuPage implements OnInit {
             }
         })
     }
-    ambilMahasiswa(id: any) {
+    ambilBukutamu(id: any) {
         this._apiService.lihat(id, 'lihatdata.php?id=').subscribe({
             next: (hasil: any) => {
                 console.log('sukses', hasil);
@@ -108,11 +108,11 @@ export class BukutamuPage implements OnInit {
         this.modal_edit = isOpen;
         this.id = idget;
         console.log(this.id);
-        this.ambilMahasiswa(this.id);
+        this.ambilBukutamu(this.id);
         this.modal_tambah = false;
         this.modal_edit = true;
     }
-    editMahasiswa() {
+    editBukutamu() {
         let data = {
             id: this.id,
             nama: this.nama,
@@ -123,12 +123,12 @@ export class BukutamuPage implements OnInit {
                 console.log(hasil);
                 this.reset_model();
                 this.getBukutamu();
-                console.log('berhasil edit Mahasiswa');
+                console.log('berhasil edit Bukutamu');
                 this.modal_edit = false;
                 this.modal.dismiss();
             },
             error: (err: any) => {
-                console.log('gagal edit Mahasiswa');
+                console.log('gagal edit Bukutamu');
             }
         })
     }

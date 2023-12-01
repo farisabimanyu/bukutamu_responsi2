@@ -1,28 +1,66 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
-import { IonApp, IonSplitPane, IonMenu, IonContent, IonList, IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import { mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp } from 'ionicons/icons';
+import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from './services/authentication.service';
+import { AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
-  standalone: true,
-  imports: [RouterLink, RouterLinkActive, CommonModule, IonApp, IonSplitPane, IonMenu, IonContent, IonList, IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   public appPages = [
-    { title: 'Inbox', url: '/folder/inbox', icon: 'mail' },
-    { title: 'Outbox', url: '/folder/outbox', icon: 'paper-plane' },
-    { title: 'Favorites', url: '/folder/favorites', icon: 'heart' },
-    { title: 'Archived', url: '/folder/archived', icon: 'archive' },
-    { title: 'Trash', url: '/folder/trash', icon: 'trash' },
-    { title: 'Spam', url: '/folder/spam', icon: 'warning' },
+    { title: 'Logout', url: '', icon: 'exit' }
   ];
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-  constructor() {
-    addIcons({ mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp });
+
+  USERNAME = 'namasaya';
+  public nama = '';
+
+  constructor(
+    private authService: AuthenticationService,
+    private alertController: AlertController,
+    private router: Router
+  ) { }
+
+  ngOnInit() {
+    this.cekSesi();
+    console.log(this.nama);
+  }
+
+  async cekSesi() {
+    const ambilNama = localStorage.getItem(this.USERNAME);
+    if (ambilNama) {
+      let namauser = ambilNama;
+      this.nama = namauser;
+    } else {
+      this.authService.logout();
+      this.router.navigateByUrl('/', { replaceUrl: true });
+    }
+  }
+
+  logout() {
+    this.alertController
+      .create({
+        header: 'Perhatian',
+        subHeader: 'Logout aplikasi?',
+        buttons: [
+          {
+            text: 'Batal',
+            handler: (data: any) => {
+              console.log('Canceled', data);
+            },
+          },
+          {
+            text: 'Yea',
+            handler: (data: any) => {
+              this.authService.logout();
+              this.router.navigateByUrl('/', { replaceUrl: true });
+            },
+          },
+        ],
+      })
+      .then((res) => {
+        res.present();
+      });
   }
 }
